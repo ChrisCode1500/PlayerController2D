@@ -102,8 +102,6 @@ public class PlayerController : MonoBehaviour
 
     void RememberJump()
     {
-        // Start Testing code
-
         fGroundedRemember -= Time.deltaTime;
         if (isGrounded)
         {
@@ -130,7 +128,5 @@ public class PlayerController : MonoBehaviour
             fGroundedRemember = 0;
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
         }
-
-        // End Testing code
     }
 }
