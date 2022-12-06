@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public float fallMultiplier;
     public float lowJumpMultiplier;
 
-    private Rigidbody2D rb2d;
+    private Rigidbody2D rb;
 
     float fJumpPressedRemember = 0;
     [SerializeField]
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         extraJumps = extraJumpsValue;
-        rb2d = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }  
 
     // Update is called once per frame
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
         moveInput = Input.GetAxis("Horizontal");
-        rb2d.velocity = new Vector2(moveInput * speed, rb2d.velocity.y);
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         
         if (facingRight == false && moveInput < 0)
         {
@@ -81,22 +81,22 @@ public class PlayerController : MonoBehaviour
         // Allows the player to jump if they have any extra jumps left.        
         if (Input.GetKeyDown(KeyCode.Space) && extraJumps > 0)
         {
-            rb2d.velocity = Vector2.up * jumpForce;
+            rb.velocity = Vector2.up * jumpForce;
             extraJumps--;
         }
         else if (Input.GetKeyDown(KeyCode.Space) && extraJumps == 0 && isGrounded == true)
         {
-            rb2d.velocity = Vector2.up * jumpForce;
+            rb.velocity = Vector2.up * jumpForce;
         }        
 
         // Implements a less floaty feel to jumping
-        if (rb2d.velocity.y < 0)
+        if (rb.velocity.y < 0)
         {
-            rb2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; // The - 1 is accounting for the physics systems normal gravity
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; // The - 1 is accounting for the physics systems normal gravity
         }
-        else if (rb2d.velocity.y > 0 && !Input.GetButton("Jump"))
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
         {
-            rb2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
 
@@ -116,9 +116,9 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonUp("Jump"))
         {
-            if (rb2d.velocity.y > 0)
+            if (rb.velocity.y > 0)
             {
-                rb2d.velocity = new Vector2(rb2d.velocity.x, rb2d.velocity.y * fCutJumpHeight);
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * fCutJumpHeight);
             }
         }
 
@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
         {
             fJumpPressedRemember = 0;
             fGroundedRemember = 0;
-            rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
     }
 }
